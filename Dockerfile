@@ -29,6 +29,12 @@ RUN add-apt-repository -y ppa:ondrej/php && \
   apt-get -y install supervisor wget git apache2 php-xdebug libapache2-mod-php5.6 mysql-server php5.6 php5.6-mysql pwgen php5.6-apc php5.6-mcrypt php5.6-gd php5.6-xml php5.6-mbstring php5.6-gettext zip unzip php5.6-zip  && \
   apt-get -y autoremove && \
   echo "ServerName localhost" >> /etc/apache2/apache2.conf
+  
+# Adds Certbot to install SSL Certificates
+RUN add-apt-repository -y ppa:certbot/certbot && \
+    apt-get update && \
+    apt-get -y install python-certbot-apache 
+    
 
 # Update CLI PHP to use 5.6
 RUN ln -sfn /usr/bin/php5.6 /etc/alternatives/php
@@ -84,5 +90,5 @@ ENV PHP_POST_MAX_SIZE 10M
 # Add volumes for the app and MySql
 VOLUME  ["/etc/mysql", "/var/lib/mysql", "/app" ]
 
-EXPOSE 80 3306
+EXPOSE 80 3306 443
 CMD ["/run.sh"]
